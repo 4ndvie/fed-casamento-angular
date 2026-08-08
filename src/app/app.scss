@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #1a1a1a;
+  font-family: Arial, sans-serif;
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+h1 {
+  margin: 0 0 16px;
+}
+
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.auth-mode {
+  display: flex;
+  gap: 8px;
+}
+
+.search-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.vendor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.vendor-card {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid #c8c8c8;
+  border-radius: 6px;
+  padding: 10px;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.btn-primary {
+  background: #2f6fed;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #ececec;
+  color: #1a1a1a;
+}
+
+.btn-success {
+  background: #1f9f5f;
+  color: #fff;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.status {
+  margin-top: 16px;
+  padding: 10px;
+  border-radius: 6px;
+  background: #dde9ff;
+  color: #0b3a9b;
+}

@@ -1,0 +1,119 @@
+<main class="page">
+  <h1>Marketplace de Casamentos</h1>
+
+  <section class="card">
+    <div class="card-header">
+      <h2>{{ authUser ? 'Olá, ' + authUser.fullName : 'Acesse sua conta' }}</h2>
+      @if (authUser) {
+        <button type="button" class="btn btn-secondary" (click)="clearSession()">Sair</button>
+      } @else {
+        <div class="auth-mode">
+          <button
+            type="button"
+            class="btn"
+            [class.btn-primary]="authMode === 'login'"
+            [class.btn-secondary]="authMode !== 'login'"
+            (click)="authMode = 'login'"
+          >
+            Entrar
+          </button>
+          <button
+            type="button"
+            class="btn"
+            [class.btn-primary]="authMode === 'register'"
+            [class.btn-secondary]="authMode !== 'register'"
+            (click)="authMode = 'register'"
+          >
+            Cadastrar
+          </button>
+        </div>
+      }
+    </div>
+
+    @if (!authUser) {
+      <form class="stack" (ngSubmit)="handleAuthSubmit()">
+        @if (authMode === 'register') {
+          <input
+            type="text"
+            placeholder="Nome completo"
+            name="fullName"
+            [(ngModel)]="fullName"
+            required
+          />
+        }
+        <input type="email" placeholder="E-mail" name="email" [(ngModel)]="email" required />
+        <input
+          type="password"
+          placeholder="Senha"
+          name="password"
+          [(ngModel)]="password"
+          required
+        />
+        <button type="submit" class="btn btn-primary">
+          {{ authMode === 'register' ? 'Criar conta' : 'Entrar' }}
+        </button>
+      </form>
+    }
+  </section>
+
+  <section class="search-row">
+    <input
+      type="text"
+      placeholder="Filtrar por cidade (ex: São Paulo)"
+      name="cityFilter"
+      [(ngModel)]="cityFilter"
+    />
+    <button type="button" class="btn btn-primary" (click)="loadVendors()">Buscar</button>
+  </section>
+
+  <section class="vendor-grid">
+    @for (vendor of vendors; track vendor.id) {
+      <article class="vendor-card">
+        <div>
+          <h3>{{ vendor.companyName }}</h3>
+          <p>{{ vendor.category }} • {{ vendor.city }} - {{ vendor.state }}</p>
+        </div>
+        <button type="button" class="btn btn-success" (click)="selectedVendor = vendor">
+          Solicitar Orçamento
+        </button>
+      </article>
+    }
+  </section>
+
+  @if (selectedVendor) {
+    <div class="modal-backdrop">
+      <div class="modal">
+        <h2>Orçamento para {{ selectedVendor.companyName }}</h2>
+        <form class="stack" (ngSubmit)="handleSendQuote()">
+          <label>
+            Data do Casamento
+            <input
+              type="datetime-local"
+              name="eventDate"
+              [(ngModel)]="eventDate"
+              required
+            />
+          </label>
+          <label>
+            Nº de Convidados
+            <input type="number" name="guestCount" [(ngModel)]="guestCount" required />
+          </label>
+          <label>
+            Mensagem
+            <textarea name="message" [(ngModel)]="message" rows="3" required></textarea>
+          </label>
+          <div class="actions">
+            <button type="button" class="btn btn-secondary" (click)="selectedVendor = null">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-success">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  @if (statusMsg) {
+    <p class="status">{{ statusMsg }}</p>
+  }
+</main>
