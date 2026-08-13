@@ -1,1 +1,527 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$rose-palette,
+        tertiary: mat.$rose-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+
+  /* Plum Rose & Amber Gold — Miséri e Quero Casar */
+  --mqc-font-display: 'Cormorant Garamond', Georgia, serif;
+  --mqc-font-body: 'DM Sans', 'Roboto', sans-serif;
+
+  --mat-sys-primary: #9b5b82;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #f0d9e8;
+  --mat-sys-on-primary-container: #3a1430;
+
+  --mat-sys-secondary: #7a7f8a;
+  --mat-sys-on-secondary: #ffffff;
+  --mat-sys-secondary-container: #e1e2e8;
+  --mat-sys-on-secondary-container: #30343c;
+
+  --mat-sys-tertiary: #c9956c;
+  --mat-sys-on-tertiary: #ffffff;
+  --mat-sys-tertiary-container: #f5e4d6;
+  --mat-sys-on-tertiary-container: #3a2414;
+
+  --mat-sys-surface: #fdfaf7;
+  --mat-sys-on-surface: #2c1d2e;
+  --mat-sys-background: #fdfaf7;
+  --mat-sys-on-background: #2c1d2e;
+  --mat-sys-surface-variant: #ede0e8;
+  --mat-sys-on-surface-variant: #534050;
+  --mat-sys-outline: #9b7d96;
+
+  --mat-sys-error: #ba1a1a;
+  --mat-sys-on-error: #ffffff;
+  --mat-sys-error-container: #ffdad6;
+  --mat-sys-on-error-container: #410002;
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font-family: var(--mqc-font-body);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}
+
+h1, h2, h3 {
+  font-family: var(--mqc-font-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+app-root .menu-page {
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--mat-sys-background) 94%, var(--mat-sys-primary-container)) 0%,
+    color-mix(in srgb, var(--mat-sys-background) 90%, var(--mat-sys-secondary-container)) 100%
+  );
+}
+
+app-root .menu-shell {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 72px 320px 1fr;
+  gap: 18px;
+  align-items: start;
+  transition: grid-template-columns 260ms ease;
+}
+
+app-root .menu-shell.sidebar-collapsed {
+  grid-template-columns: 72px 132px 1fr;
+}
+
+app-root .menu-rail {
+  border-radius: 24px;
+  padding: 12px 8px;
+  min-height: calc(100vh - 48px);
+  background: color-mix(in srgb, var(--mat-sys-surface) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 20%, transparent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+app-root .menu-rail-top {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+app-root .menu-rail-brand {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+}
+
+app-root .menu-rail-brand .brand-logo {
+  width: 28px;
+  height: 28px;
+}
+
+app-root .menu-rail-toggle {
+  width: 30px;
+  height: 30px;
+  color: var(--mat-sys-primary);
+  background: color-mix(in srgb, var(--mat-sys-primary-container) 68%, white);
+}
+
+app-root .menu-rail-nav,
+app-root .menu-rail-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+}
+
+app-root .menu-rail-bottom {
+  margin-top: auto;
+}
+
+app-root .menu-rail-item {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+app-root .menu-rail-item.active {
+  background: #8a4f7d;
+  color: #ffffff;
+}
+
+app-root .menu-sidebar {
+  border-radius: 24px;
+  padding: 20px;
+  background: color-mix(in srgb, var(--mat-sys-surface) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 25%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: calc(100vh - 48px);
+  transition: opacity 220ms ease, transform 220ms ease, padding 220ms ease;
+  overflow: hidden;
+}
+
+app-root .menu-sidebar.collapsed {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  padding: 14px 10px;
+}
+
+app-root .menu-brand-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0;
+}
+
+app-root .menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+app-root .menu-brand-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  padding: 4px;
+  background: color-mix(in srgb, var(--mat-sys-surface) 94%, transparent);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--mat-sys-primary) 18%, transparent);
+}
+
+app-root .menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+app-root .menu-nav-secondary {
+  margin-top: 2px;
+  padding-top: 12px;
+  border-top: 1px solid color-mix(in srgb, var(--mat-sys-outline) 18%, transparent);
+}
+
+app-root .menu-group-title {
+  margin: 6px 2px 0;
+  font: var(--mat-sys-label-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+app-root .menu-nav-item {
+  justify-content: flex-start;
+  min-height: 44px;
+  border-radius: 12px;
+}
+
+app-root .menu-nav-item mat-icon,
+app-root .menu-user-footer mat-icon {
+  margin-right: 8px;
+}
+
+app-root .menu-nav-item.active {
+  background: #8a4f7d;
+  color: #ffffff;
+  border-color: transparent;
+}
+
+app-root .menu-submenu {
+  margin: -2px 0 6px 38px;
+  padding-left: 10px;
+  border-left: 1px solid color-mix(in srgb, var(--mat-sys-outline) 24%, transparent);
+  display: grid;
+  gap: 4px;
+}
+
+app-root .menu-submenu-item {
+  border: 0;
+  background: transparent;
+  padding: 4px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+  cursor: pointer;
+  text-align: left;
+}
+
+app-root .menu-submenu-item mat-icon {
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
+  color: var(--mat-sys-primary);
+}
+
+app-root .menu-upgrade {
+  margin-top: auto;
+  border-radius: 16px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--mat-sys-primary-container) 56%, white);
+}
+
+app-root .menu-upgrade-title {
+  margin: 0 0 10px;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-medium);
+}
+
+app-root .menu-upgrade-btn {
+  width: 100%;
+  border-radius: 999px;
+}
+
+app-root .menu-user-footer {
+  margin-top: auto;
+  justify-content: flex-start;
+  border-radius: 14px;
+  min-height: 56px;
+  padding: 8px 12px;
+}
+
+app-root .menu-user-footer .mdc-button__label {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+}
+
+app-root .menu-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  background: color-mix(in srgb, var(--mat-sys-primary-container) 75%, white);
+  color: var(--mat-sys-on-primary-container);
+  font: var(--mat-sys-title-small);
+}
+
+app-root .menu-user-footer-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  line-height: 1.2;
+}
+
+app-root .menu-user-footer-text small {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-medium);
+  line-height: 1.1;
+}
+
+app-root .menu-user-footer-text strong {
+  display: block;
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-on-surface);
+}
+
+app-root .menu-user-footer mat-icon {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+app-root .menu-content {
+  border-radius: 24px;
+  padding: 20px;
+  background: color-mix(in srgb, var(--mat-sys-surface) 90%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 25%, transparent);
+}
+
+app-root .menu-sidebar.collapsed .menu-brand-text,
+app-root .menu-sidebar.collapsed .menu-user,
+app-root .menu-sidebar.collapsed .menu-group-title,
+app-root .menu-sidebar.collapsed .menu-item-label,
+app-root .menu-sidebar.collapsed .menu-upgrade,
+app-root .menu-sidebar.collapsed .menu-user-footer {
+  display: none;
+}
+
+app-root .menu-sidebar.collapsed .menu-brand {
+  gap: 6px;
+}
+
+app-root .menu-sidebar.collapsed .menu-brand-logo {
+  width: 34px;
+  height: 34px;
+  padding: 2px;
+}
+
+app-root .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+app-root .page-title {
+  margin: 0;
+}
+
+app-root .mega-menu-panel {
+  margin-bottom: 12px;
+  border-radius: 18px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--mat-sys-surface-container-low) 80%, white);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 20%, transparent);
+}
+
+app-root .mega-menu-header h2 {
+  margin: 0;
+  font: var(--mat-sys-title-large);
+}
+
+app-root .mega-menu-header p {
+  margin: 6px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+app-root .mega-menu-grid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  justify-items: stretch;
+}
+
+app-root .mega-menu-action {
+  min-height: 72px;
+  border-radius: 14px;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 10px 12px;
+  border-color: color-mix(in srgb, var(--mat-sys-outline) 22%, transparent);
+  background: color-mix(in srgb, var(--mat-sys-surface) 92%, transparent);
+}
+
+app-root .mega-menu-action span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+}
+
+app-root .mega-menu-action strong {
+  font: var(--mat-sys-title-small);
+}
+
+app-root .mega-menu-action small {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+app-root .mega-menu-action > mat-icon:first-child {
+  margin-right: 10px;
+  color: var(--mat-sys-primary);
+}
+
+app-root .mega-menu-action > mat-icon:last-child {
+  margin-left: auto;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+app-root .metrics-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+app-root .metric-card {
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--mat-sys-surface-container-low) 85%, white);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 20%, transparent);
+}
+
+app-root .metric-label {
+  margin: 0 0 8px;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-large);
+}
+
+app-root .metric-card h3 {
+  margin: 0;
+  font: var(--mat-sys-title-large);
+  color: var(--mat-sys-on-surface);
+}
+
+@media (max-width: 960px) {
+  app-root .menu-shell {
+    grid-template-columns: 1fr;
+  }
+
+  app-root .menu-shell.sidebar-collapsed {
+    grid-template-columns: 1fr;
+  }
+
+  app-root .menu-rail {
+    display: none;
+  }
+
+  app-root .menu-sidebar,
+  app-root .menu-content {
+    padding: 16px;
+    min-height: auto;
+  }
+
+  app-root .menu-sidebar.collapsed {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    padding: 16px;
+  }
+
+  app-root .menu-submenu {
+    margin-left: 30px;
+  }
+
+  app-root .metrics-row {
+    grid-template-columns: 1fr;
+  }
+
+  app-root .mega-menu-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Snackbar notification classes ── */
+.success-snackbar .mdc-snackbar__surface {
+  background: #8a4f7d !important;
+  color: #ffffff !important;
+}
+
+.success-snackbar .mat-mdc-button.mat-mdc-snack-bar-action {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.error-snackbar .mdc-snackbar__surface {
+  background: #ba1a1a !important;
+  color: #ffffff !important;
+}
+
+.error-snackbar .mat-mdc-button.mat-mdc-snack-bar-action {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.info-snackbar .mdc-snackbar__surface {
+  background: #534050 !important;
+  color: #ffffff !important;
+}
+
 /* You can add global styles to this file, and also import other style files */

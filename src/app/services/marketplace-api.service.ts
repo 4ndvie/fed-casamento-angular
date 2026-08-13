@@ -9,6 +9,18 @@ export interface Vendor {
   city: string;
   state: string;
   startingPrice?: number | null;
+  rating?: number | null;
+  reviewCount?: number | null;
+}
+
+export interface VendorFilters {
+  category?: string;
+  priceMin?: number;
+  priceMax?: number;
+  maxDistance?: number;
+  startDate?: Date | null;
+  endDate?: Date | null;
+  city?: string;
 }
 
 export interface AuthInput {
@@ -44,11 +56,15 @@ export class MarketplaceApiService {
 
   constructor(private readonly http: HttpClient) {}
 
-  async getVendors(city?: string): Promise<Vendor[]> {
+  async getVendors(filters: VendorFilters = {}): Promise<Vendor[]> {
     const url = new URL(`${this.baseUrl}/vendors`);
-    if (city?.trim()) {
-      url.searchParams.set('city', city.trim());
-    }
+    if (filters.city?.trim()) url.searchParams.set('city', filters.city.trim());
+    if (filters.category) url.searchParams.set('category', filters.category);
+    if (filters.priceMin != null) url.searchParams.set('priceMin', String(filters.priceMin));
+    if (filters.priceMax != null) url.searchParams.set('priceMax', String(filters.priceMax));
+    if (filters.maxDistance != null) url.searchParams.set('maxDistance', String(filters.maxDistance));
+    if (filters.startDate) url.searchParams.set('startDate', filters.startDate.toISOString());
+    if (filters.endDate) url.searchParams.set('endDate', filters.endDate.toISOString());
     return firstValueFrom(this.http.get<Vendor[]>(url.toString()));
   }
 

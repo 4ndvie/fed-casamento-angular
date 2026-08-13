@@ -14,10 +14,10 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render login heading when user is not authenticated', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Marketplace de Casamentos');
+    expect(compiled.querySelector('.login-hero h1')?.textContent).toContain('Welcome Page');
   });
 });
