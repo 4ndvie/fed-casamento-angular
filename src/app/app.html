@@ -93,6 +93,7 @@
     @if (!onboardingCompleted) {
       <app-onboarding (finished)="onOnboardingFinished()" />
     }
+    <div class="route-proxy" aria-hidden="true"><router-outlet /></div>
     <section class="menu-shell" [class.sidebar-collapsed]="isMenuCollapsed">
       <aside class="menu-rail" aria-label="Acesso rápido">
         <div class="menu-rail-top">
@@ -125,6 +126,9 @@
           </button>
           <button type="button" mat-icon-button class="menu-rail-item" [class.active]="activeMenu === 'guide'" (click)="setActiveMenu('guide')">
             <mat-icon>menu_book</mat-icon>
+          </button>
+          <button type="button" mat-icon-button class="menu-rail-item" [class.active]="activeMenu === 'personalize'" (click)="setActiveMenu('personalize')">
+            <mat-icon>perm_media</mat-icon>
           </button>
           <button type="button" mat-icon-button class="menu-rail-item" [class.active]="activeMenu === 'budget'" (click)="setActiveMenu('budget')">
             <mat-icon>account_balance_wallet</mat-icon>
@@ -281,6 +285,27 @@
               }
             </div>
           }
+
+          <button
+            type="button"
+            mat-stroked-button
+            class="menu-nav-item"
+            [class.active]="activeMenu === 'personalize'"
+            (click)="setActiveMenu('personalize')"
+          >
+            <mat-icon>perm_media</mat-icon>
+            <span class="menu-item-label">Personalizar dia</span>
+          </button>
+          @if (activeMenu === 'personalize') {
+            <div class="menu-submenu">
+              @for (sub of menuMeta.personalize.actions; track sub.label) {
+                <button type="button" class="menu-submenu-item">
+                  <mat-icon>{{ sub.icon }}</mat-icon>
+                  <span>{{ sub.label }}</span>
+                </button>
+              }
+            </div>
+          }
         </nav>
 
         <nav class="menu-nav menu-nav-secondary" aria-label="Configurações e conta">
@@ -378,6 +403,7 @@
           @case ('notifications') { <app-notifications /> }
           @case ('budget') { <app-finances /> }
           @case ('guide') { <app-guide /> }
+          @case ('personalize') { <app-personalize /> }
           @case ('vendors') {
             <app-vendor-search (search)="onVendorSearch($event)" />
 

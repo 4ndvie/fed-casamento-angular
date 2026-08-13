@@ -88,7 +88,8 @@ app-root .menu-shell {
 }
 
 app-root .menu-shell.sidebar-collapsed {
-  grid-template-columns: 72px 132px 1fr;
+  grid-template-columns: 72px 0 1fr;
+  gap: 10px;
 }
 
 app-root .menu-rail {
@@ -101,25 +102,23 @@ app-root .menu-rail {
   flex-direction: column;
   align-items: center;
   gap: 14px;
+  position: relative;
 }
 
 app-root .menu-rail-top {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  min-height: 84px;
+  position: relative;
 }
 
 app-root .menu-rail-brand {
   width: 42px;
   height: 42px;
   border-radius: 14px;
-}
-
-app-root .menu-rail-brand .brand-logo {
-  width: 28px;
-  height: 28px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 app-root .menu-rail-toggle {
@@ -127,6 +126,10 @@ app-root .menu-rail-toggle {
   height: 30px;
   color: var(--mat-sys-primary);
   background: color-mix(in srgb, var(--mat-sys-primary-container) 68%, white);
+  position: absolute;
+  top: 46px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 app-root .menu-rail-nav,
@@ -163,15 +166,18 @@ app-root .menu-sidebar {
   flex-direction: column;
   gap: 18px;
   min-height: calc(100vh - 48px);
+  min-width: 0;
   transition: opacity 220ms ease, transform 220ms ease, padding 220ms ease;
   overflow: hidden;
 }
 
 app-root .menu-sidebar.collapsed {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
-  padding: 14px 10px;
+  opacity: 0;
+  transform: translateX(-8px);
+  pointer-events: none;
+  padding: 0;
+  width: 0;
+  border-width: 0;
 }
 
 app-root .menu-brand-row {
@@ -485,6 +491,8 @@ app-root .metric-card h3 {
     transform: none;
     pointer-events: auto;
     padding: 16px;
+    width: auto;
+    border-width: 1px;
   }
 
   app-root .menu-submenu {

@@ -7,6 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs';
 import {
   AuthUser,
   MarketplaceApiService,
@@ -21,6 +23,7 @@ import { FavoritesComponent } from './favorites/favorites.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { FinancesComponent } from './finances/finances.component';
 import { GuideComponent } from './guide/guide.component';
+import { PersonalizeComponent } from './personalize/personalize.component';
 
 type AuthMode = 'login' | 'register';
 type MenuItemId =
@@ -31,6 +34,7 @@ type MenuItemId =
   | 'budget'
   | 'notifications'
   | 'guide'
+  | 'personalize'
   | 'profile'
   | 'settings';
 
@@ -46,6 +50,7 @@ type MenuItemId =
     MatIconModule,
     MatInputModule,
     MatSnackBarModule,
+    RouterOutlet,
     VendorSearchComponent,
     OnboardingComponent,
     QuotesComponent,
@@ -53,6 +58,7 @@ type MenuItemId =
     NotificationsComponent,
     FinancesComponent,
     GuideComponent,
+    PersonalizeComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
@@ -76,6 +82,33 @@ export class App implements OnInit {
   activeMenu: MenuItemId = 'vendors';
   token = '';
   authUser: AuthUser | null = null;
+
+  private readonly menuPathMap: Record<MenuItemId, string> = {
+    vendors: 'fornecedores',
+    quotes: 'orcamentos',
+    favorites: 'favoritos',
+    calendar: 'calendario',
+    budget: 'financeiro',
+    notifications: 'notificacoes',
+    guide: 'guia',
+    personalize: 'personalizar',
+    profile: 'perfil',
+    settings: 'configuracoes',
+  };
+
+  private readonly pathMenuMap: Record<string, MenuItemId> = {
+    fornecedores: 'vendors',
+    orcamentos: 'quotes',
+    favoritos: 'favorites',
+    calendario: 'calendar',
+    financeiro: 'budget',
+    notificacoes: 'notifications',
+    guia: 'guide',
+    personalizar: 'personalize',
+    perfil: 'profile',
+    configuracoes: 'settings',
+  };
+
   readonly menuMeta: Record<
     MenuItemId,
     { title: string; subtitle: string; actions: Array<{ icon: string; label: string; hint: string }> }
@@ -150,6 +183,16 @@ export class App implements OnInit {
         { icon: 'tips_and_updates', label: 'Dicas', hint: 'Sugestões inteligentes.' },
       ],
     },
+    personalize: {
+      title: 'Personalização do dia',
+      subtitle: 'Organize referências visuais com fotos, vídeos e colagens.',
+      actions: [
+        { icon: 'photo_library', label: 'Fotos', hint: 'Inspirações para cerimônia e festa.' },
+        { icon: 'video_library', label: 'Vídeos', hint: 'Referências de entradas, dança e making of.' },
+        { icon: 'palette', label: 'Colagens', hint: 'Moodboards por estilo e paleta.' },
+        { icon: 'auto_awesome', label: 'Momentos', hint: 'Planeje os destaques do grande dia.' },
+      ],
+    },
     profile: {
       title: 'Perfil do casal',
       subtitle: 'Dados de contato e preferências do evento.',
@@ -177,6 +220,7 @@ export class App implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly snackBar: MatSnackBar,
     private readonly planner: WeddingPlannerService,
+    private readonly router: Router,
   ) {
     this.authForm = this.formBuilder.group({
       fullName: [''],
@@ -223,6 +267,12 @@ export class App implements OnInit {
       this.token = session.token;
       this.authUser = session.user;
     }
+
+    this.syncMenuFromUrl();
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(() => this.syncMenuFromUrl());
+
     await this.loadVendors({});
   }
 
@@ -291,6 +341,7 @@ export class App implements OnInit {
     this.authForm.reset({ fullName: '', email: '', password: '' });
     this.authForm.markAsPristine();
     this.authForm.markAsUntouched();
+    void this.router.navigate(['/fornecedores']);
   }
 
   async handleAuthSubmit(): Promise<void> {
@@ -329,6 +380,9 @@ export class App implements OnInit {
         'success',
       );
       this.authForm.patchValue({ password: '' });
+      if (this.router.url === '/' || this.router.url === '') {
+        void this.router.navigate(['/fornecedores']);
+      }
     } catch (error) {
       this.notify(this.getErrorMessage(error), 'error');
     } finally {
@@ -361,6 +415,10 @@ export class App implements OnInit {
 
   setActiveMenu(menu: MenuItemId): void {
     this.activeMenu = menu;
+    const nextPath = this.menuPathMap[menu];
+    if (this.router.url !== `/${nextPath}`) {
+      void this.router.navigate([`/${nextPath}`]);
+    }
   }
 
   get currentMenuData(): {
@@ -422,5 +480,10 @@ export class App implements OnInit {
 
   private getErrorMessage(error: unknown): string {
     return error instanceof Error ? error.message : 'Erro inesperado';
+  }
+
+  private syncMenuFromUrl(): void {
+    const segment = this.router.url.split('?')[0].split('#')[0].split('/').filter(Boolean)[0];
+    this.activeMenu = this.pathMenuMap[segment ?? 'fornecedores'] ?? 'vendors';
   }
 }
