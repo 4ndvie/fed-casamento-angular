@@ -1,0 +1,178 @@
+<header class="fn-head">
+  <section class="fn-tabs">
+    @for (tab of tabs; track tab.value) {
+      <button type="button" class="fn-tab" [class.active]="active() === tab.value" (click)="active.set(tab.value)">
+        <mat-icon>{{ tab.icon }}</mat-icon>
+        <span>{{ tab.label }}</span>
+      </button>
+    }
+  </section>
+  <button mat-flat-button class="fn-add" (click)="openForm()">
+    <mat-icon>add</mat-icon> Adicionar gasto
+  </button>
+</header>
+
+<!-- OVERVIEW -->
+@if (active() === 'overview') {
+  <section class="fn-metrics">
+    <mat-card class="fn-metric">
+      <p class="fn-metric-label">Orçamento total</p>
+      <h3>{{ formatCurrency(onboarding().budget) }}</h3>
+    </mat-card>
+    <mat-card class="fn-metric">
+      <p class="fn-metric-label">Planejado</p>
+      <h3>{{ formatCurrency(totalPlanned()) }}</h3>
+    </mat-card>
+    <mat-card class="fn-metric">
+      <p class="fn-metric-label">Pago</p>
+      <h3>{{ formatCurrency(totalPaid()) }}</h3>
+    </mat-card>
+    <mat-card class="fn-metric" [class.negative]="remaining() < 0">
+      <p class="fn-metric-label">Saldo restante</p>
+      <h3>{{ formatCurrency(remaining()) }}</h3>
+    </mat-card>
+  </section>
+
+  <mat-card class="fn-progress-card">
+    <div class="fn-progress-row">
+      <span>Uso do orçamento</span>
+      <strong>{{ budgetUsedPercent() }}%</strong>
+    </div>
+    <div class="fn-bar"><span [style.width.%]="budgetUsedPercent()"></span></div>
+    <div class="fn-progress-row">
+      <span>Pagamentos efetuados</span>
+      <strong>{{ paidPercent() }}%</strong>
+    </div>
+    <div class="fn-bar"><span class="paid" [style.width.%]="paidPercent()"></span></div>
+  </mat-card>
+}
+
+<!-- BY CATEGORY -->
+@if (active() === 'category') {
+  @if (byCategory().length) {
+    <section class="fn-cat-list">
+      @for (c of byCategory(); track c.category) {
+        <div class="fn-cat">
+          <div class="fn-cat-top">
+            <strong>{{ c.category }}</strong>
+            <span>{{ formatCurrency(c.value) }} · {{ c.percent }}%</span>
+          </div>
+          <div class="fn-bar"><span [style.width.%]="c.percent"></span></div>
+        </div>
+      }
+    </section>
+  } @else {
+    <div class="fn-empty"><mat-icon>bar_chart</mat-icon><p>Adicione gastos para ver a distribuição.</p></div>
+  }
+}
+
+<!-- SAVINGS -->
+@if (active() === 'savings') {
+  <mat-card class="fn-savings">
+    <mat-icon class="fn-savings-icon">savings</mat-icon>
+    <p class="fn-metric-label">Economia estimada</p>
+    <h3 class="fn-savings-value">{{ formatCurrency(savings()) }}</h3>
+    <p class="fn-savings-text">
+      Diferença entre o orçamento definido ({{ formatCurrency(onboarding().budget) }})
+      e o total planejado ({{ formatCurrency(totalPlanned()) }}).
+    </p>
+    <div class="fn-savings-tips">
+      <div class="fn-tip"><mat-icon>lightbulb</mat-icon> Negocie pacotes fechados com fornecedores.</div>
+      <div class="fn-tip"><mat-icon>lightbulb</mat-icon> Reserve 10% do orçamento para imprevistos.</div>
+      <div class="fn-tip"><mat-icon>lightbulb</mat-icon> Priorize os itens marcados como importantes.</div>
+    </div>
+  </mat-card>
+}
+
+<!-- PAYMENTS -->
+@if (active() === 'payments') {
+  @if (expenses().length) {
+    <section class="fn-payments">
+      @for (e of expenses(); track e.id) {
+        <div class="fn-payment" [class.paid]="e.status === 'paid'">
+          <div class="fn-payment-main">
+            <div class="fn-payment-title">
+              <strong>{{ e.description }}</strong>
+              @if (e.isCustomVendor) {
+                <span class="fn-tag-custom"><mat-icon>person_add</mat-icon> Fora da plataforma</span>
+              }
+            </div>
+            <small>{{ e.vendorName }} · {{ e.category }}</small>
+          </div>
+          <div class="fn-payment-side">
+            <strong class="fn-payment-amount">{{ formatCurrency(e.amount) }}</strong>
+            <div class="fn-payment-actions">
+              <button type="button" class="fn-status-btn" [class.on]="e.status === 'paid'" (click)="togglePaid(e)">
+                <mat-icon>{{ e.status === 'paid' ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+                {{ e.status === 'paid' ? 'Pago' : 'Marcar pago' }}
+              </button>
+              <button mat-icon-button (click)="remove(e.id)" aria-label="Remover"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+  } @else {
+    <div class="fn-empty"><mat-icon>receipt_long</mat-icon><p>Nenhum pagamento registrado ainda.</p></div>
+  }
+}
+
+<!-- ADD EXPENSE MODAL -->
+@if (showForm()) {
+  <div class="fn-modal-backdrop" (click)="closeForm()">
+    <mat-card class="fn-modal" (click)="$event.stopPropagation()">
+      <h2>Adicionar gasto</h2>
+      <p class="fn-modal-sub">Inclua também fornecedores que não estão na plataforma.</p>
+
+      <mat-form-field appearance="outline" class="fn-full">
+        <mat-label>Descrição</mat-label>
+        <input matInput [ngModel]="draft().description" (ngModelChange)="patchDraft('description', $event)"
+               placeholder="Ex.: Entrada do buffet" />
+      </mat-form-field>
+
+      <div class="fn-modal-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Categoria</mat-label>
+          <mat-select [ngModel]="draft().category" (ngModelChange)="patchDraft('category', $event)">
+            @for (c of categories; track c) { <mat-option [value]="c">{{ c }}</mat-option> }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Valor</mat-label>
+          <span matTextPrefix>R$&nbsp;</span>
+          <input matInput type="number" min="0" [ngModel]="draft().amount"
+                 (ngModelChange)="patchDraft('amount', +$event)" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="fn-full">
+        <mat-label>Fornecedor</mat-label>
+        <input matInput [ngModel]="draft().vendorName" (ngModelChange)="patchDraft('vendorName', $event)"
+               placeholder="Nome do fornecedor" />
+      </mat-form-field>
+
+      <mat-slide-toggle [ngModel]="draft().isCustomVendor"
+                        (ngModelChange)="patchDraft('isCustomVendor', $event)">
+        Fornecedor não cadastrado na plataforma
+      </mat-slide-toggle>
+
+      <div class="fn-modal-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Data</mat-label>
+          <input matInput type="date" [ngModel]="draft().date" (ngModelChange)="patchDraft('date', $event)" />
+        </mat-form-field>
+        <mat-slide-toggle class="fn-paid-toggle"
+                          [ngModel]="draft().status === 'paid'"
+                          (ngModelChange)="patchDraft('status', $event ? 'paid' : 'planned')">
+          Já pago
+        </mat-slide-toggle>
+      </div>
+
+      <div class="fn-modal-actions">
+        <button mat-stroked-button (click)="closeForm()">Cancelar</button>
+        <button mat-flat-button class="fn-add" [disabled]="!canSave" (click)="save()">Salvar gasto</button>
+      </div>
+    </mat-card>
+  </div>
+}
+

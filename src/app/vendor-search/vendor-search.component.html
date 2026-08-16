@@ -1,0 +1,106 @@
+<section class="vsearch-card">
+  <h2 class="vsearch-title">Explorar Fornecedores</h2>
+
+  <form class="vsearch-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <!-- Linha 1: Categoria | Faixa de Preço | Distância -->
+    <div class="vsearch-row vsearch-row-1">
+
+      <!-- Categoria -->
+      <div class="vsearch-field vsearch-field-cat">
+        <span class="vsearch-label">Tipo de Fornecedor</span>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="vsearch-cat-field">
+          <mat-select formControlName="category">
+            <mat-select-trigger>
+              <span class="vsearch-cat-option">
+                <mat-icon fontSet="material-icons">{{ selectedCategoryIcon }}</mat-icon>
+                {{ selectedCategoryValue }}
+              </span>
+            </mat-select-trigger>
+            @for (cat of categories; track cat.value) {
+              <mat-option [value]="cat.value">
+                <span class="vsearch-cat-option">
+                  <mat-icon fontSet="material-icons">{{ cat.icon }}</mat-icon>
+                  <span class="vsearch-cat-label">{{ cat.value }}</span>
+                </span>
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Faixa de Preço -->
+      <div class="vsearch-field vsearch-field-slider">
+        <span class="vsearch-label">Média de Preços</span>
+        <mat-slider
+          min="500"
+          max="30000"
+          step="500"
+          [discrete]="true"
+          [displayWith]="formatPrice"
+          class="vsearch-slider">
+          <input matSliderStartThumb formControlName="priceMin" />
+          <input matSliderEndThumb formControlName="priceMax" />
+        </mat-slider>
+        <div class="vsearch-range-labels">
+          <span>{{ priceMinLabel }} -</span>
+          <span>{{ priceMaxLabel }}</span>
+        </div>
+      </div>
+
+      <!-- Distância Máxima -->
+      <div class="vsearch-field vsearch-field-slider">
+        <div class="vsearch-slider-head">
+          <span class="vsearch-label">Distância Máxima</span>
+          <mat-icon class="vsearch-loc-icon" fontSet="material-icons">location_on</mat-icon>
+        </div>
+        <mat-slider
+          min="5"
+          max="200"
+          step="5"
+          [discrete]="true"
+          class="vsearch-slider">
+          <input matSliderThumb formControlName="maxDistance" />
+        </mat-slider>
+        <div class="vsearch-range-labels">
+          <span>5 km -</span>
+          <span>{{ maxDistanceLabel }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Linha 2: Date Range -->
+    <div class="vsearch-row vsearch-row-2">
+      <div class="vsearch-field">
+        <span class="vsearch-label">
+          Datas de Disponibilidade
+          <em class="vsearch-label-sub">(seleciona evento)</em>
+        </span>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="vsearch-date-field">
+          <mat-date-range-input [rangePicker]="eventPicker">
+            <input matStartDate formControlName="startDate" placeholder="dd/mm/aaaa" />
+            <input matEndDate formControlName="endDate" placeholder="dd/mm/aaaa" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="eventPicker" />
+          <mat-date-range-picker #eventPicker />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Linha 3: Filtro atual | Cidade | Buscar -->
+    <div class="vsearch-row vsearch-row-3">
+      <div class="vsearch-city-current">
+        <small>Filtro atual</small>
+        <span>{{ cityDisplay }}</span>
+      </div>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="vsearch-city-field">
+        <input matInput type="text" formControlName="city" placeholder="Filtrar por cidade" />
+      </mat-form-field>
+      <button type="submit" mat-flat-button class="vsearch-search-btn">
+        Buscar
+      </button>
+    </div>
+
+  </form>
+</section>

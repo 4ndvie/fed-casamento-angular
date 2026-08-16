@@ -1,0 +1,113 @@
+<header class="ps-head">
+  <h2>Personalize seu grande dia</h2>
+  <p>Crie um painel com fotos, videos e colagens para alinhar referencias com o casal e fornecedores.</p>
+</header>
+
+<section class="ps-tabs">
+  <button type="button" class="ps-tab" [class.active]="active() === 'photos'" (click)="active.set('photos')">
+    <mat-icon>photo_library</mat-icon> Fotos
+  </button>
+  <button type="button" class="ps-tab" [class.active]="active() === 'videos'" (click)="active.set('videos')">
+    <mat-icon>video_library</mat-icon> Videos
+  </button>
+  <button type="button" class="ps-tab" [class.active]="active() === 'collages'" (click)="active.set('collages')">
+    <mat-icon>palette</mat-icon> Colagens
+  </button>
+</section>
+
+@if (active() === 'photos') {
+  <section class="ps-upload-row">
+    <label class="ps-upload-btn">
+      <input type="file" accept="image/*" multiple (change)="onPickPhotos($event)" />
+      <mat-icon>add_photo_alternate</mat-icon>
+      Adicionar fotos
+    </label>
+  </section>
+
+  @if (photos().length) {
+    <section class="ps-grid">
+      @for (item of photos(); track item.id) {
+        <mat-card class="ps-media-card">
+          <img [src]="item.dataUrl" [alt]="item.name" loading="lazy" />
+          <button mat-icon-button class="ps-remove" (click)="removeMedia(item.id)" aria-label="Remover foto">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card>
+      }
+    </section>
+  } @else {
+    <div class="ps-empty"><mat-icon>image</mat-icon><p>Nenhuma foto adicionada.</p></div>
+  }
+}
+
+@if (active() === 'videos') {
+  <section class="ps-upload-row">
+    <label class="ps-upload-btn">
+      <input type="file" accept="video/*" multiple (change)="onPickVideos($event)" />
+      <mat-icon>video_call</mat-icon>
+      Adicionar videos
+    </label>
+  </section>
+
+  @if (videos().length) {
+    <section class="ps-grid">
+      @for (item of videos(); track item.id) {
+        <mat-card class="ps-media-card">
+          <video controls [src]="item.dataUrl" preload="metadata"></video>
+          <button mat-icon-button class="ps-remove" (click)="removeMedia(item.id)" aria-label="Remover video">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card>
+      }
+    </section>
+  } @else {
+    <div class="ps-empty"><mat-icon>movie</mat-icon><p>Nenhum video adicionado.</p></div>
+  }
+}
+
+@if (active() === 'collages') {
+  <mat-card class="ps-collage-form">
+    <h3>Nova colagem / moodboard</h3>
+    <mat-form-field appearance="outline" class="ps-full">
+      <mat-label>Titulo</mat-label>
+      <input matInput [ngModel]="collageDraft().title" (ngModelChange)="patchCollage('title', $event)" placeholder="Ex.: Cerimonia ao por do sol" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ps-full">
+      <mat-label>Descricao</mat-label>
+      <textarea matInput rows="3" [ngModel]="collageDraft().description" (ngModelChange)="patchCollage('description', $event)" placeholder="Paleta, clima, referencias, observacoes..."></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ps-full">
+      <mat-label>URL de imagem (opcional)</mat-label>
+      <input matInput [ngModel]="collageDraft().imageUrl" (ngModelChange)="patchCollage('imageUrl', $event)" />
+    </mat-form-field>
+
+    <button mat-flat-button class="ps-primary" (click)="addCollage()">
+      <mat-icon>add</mat-icon>
+      Salvar colagem
+    </button>
+  </mat-card>
+
+  @if (collages().length) {
+    <section class="ps-collages">
+      @for (item of collages(); track item.id) {
+        <mat-card class="ps-collage-card">
+          @if (item.imageUrl) {
+            <img [src]="item.imageUrl" [alt]="item.title" loading="lazy" />
+          }
+          <div class="ps-collage-body">
+            <h4>{{ item.title }}</h4>
+            <p>{{ item.description || 'Sem descricao.' }}</p>
+          </div>
+          <button mat-icon-button class="ps-remove" (click)="removeCollage(item.id)" aria-label="Remover colagem">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card>
+      }
+    </section>
+  } @else {
+    <div class="ps-empty"><mat-icon>dashboard_customize</mat-icon><p>Nenhuma colagem criada.</p></div>
+  }
+}
+

@@ -1,0 +1,35 @@
+@if (favorites().length) {
+  <section class="fav-grid">
+    @for (item of favorites(); track item.id) {
+      <mat-card class="fav-card">
+        <div class="fav-head">
+          <span class="fav-icon"><mat-icon>{{ icon(item.category) }}</mat-icon></span>
+          <button type="button" mat-icon-button class="fav-remove" (click)="remove(item.id)"
+                  aria-label="Remover dos favoritos">
+            <mat-icon>favorite</mat-icon>
+          </button>
+        </div>
+        <h3 class="fav-name">{{ item.name }}</h3>
+        <p class="fav-cat">{{ item.category }}</p>
+        <div class="fav-stars">
+          <span class="fav-star">★</span>
+          <span>{{ item.rating.toFixed(1) }}</span>
+        </div>
+        <div class="fav-footer">
+          <div class="fav-price">
+            <small>A partir de</small>
+            <strong>{{ formatCurrency(item.startingPrice) }}</strong>
+          </div>
+          <span class="fav-city">{{ item.city }}</span>
+        </div>
+      </mat-card>
+    }
+  </section>
+} @else {
+  <div class="fav-empty">
+    <mat-icon>favorite_border</mat-icon>
+    <p>Você ainda não salvou fornecedores.</p>
+    <small>Toque no coração dos fornecedores para acessá-los rapidamente aqui.</small>
+  </div>
+}
+

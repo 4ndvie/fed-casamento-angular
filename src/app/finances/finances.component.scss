@@ -1,0 +1,360 @@
+:host {
+  display: block;
+}
+
+.fn-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.fn-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fn-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--mat-sys-surface) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 22%, transparent);
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-large);
+}
+
+.fn-tab mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.fn-tab.active {
+  background: #8a4f7d;
+  border-color: transparent;
+  color: #fff;
+}
+
+.fn-add {
+  border-radius: 999px;
+  background: #8a4f7d;
+  color: #fff;
+}
+
+/* Metrics */
+.fn-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.fn-metric {
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 18%, transparent);
+}
+
+.fn-metric.negative h3 {
+  color: var(--mat-sys-error);
+}
+
+.fn-metric-label {
+  margin: 0 0 6px;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-large);
+}
+
+.fn-metric h3 {
+  margin: 0;
+  font: var(--mat-sys-title-large);
+}
+
+/* Progress */
+.fn-progress-card {
+  padding: 18px;
+  border-radius: 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.fn-progress-row {
+  display: flex;
+  justify-content: space-between;
+  font: var(--mat-sys-label-large);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.fn-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mat-sys-outline) 16%, transparent);
+  overflow: hidden;
+}
+
+.fn-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #9b5b82, #c9956c);
+}
+
+.fn-bar span.paid {
+  background: linear-gradient(90deg, #4caf6d, #7fc99a);
+}
+
+/* Category */
+.fn-cat-list {
+  display: grid;
+  gap: 14px;
+}
+
+.fn-cat-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font: var(--mat-sys-label-large);
+}
+
+.fn-cat-top span {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Savings */
+.fn-savings {
+  padding: 28px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.fn-savings-icon {
+  font-size: 44px;
+  width: 44px;
+  height: 44px;
+  color: #4caf6d;
+}
+
+.fn-savings-value {
+  margin: 4px 0 10px;
+  font: var(--mat-sys-display-small);
+  color: #3f915f;
+}
+
+.fn-savings-text {
+  max-width: 460px;
+  margin: 0 auto 20px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.fn-savings-tips {
+  display: grid;
+  gap: 8px;
+  max-width: 460px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.fn-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--mat-sys-surface-variant) 40%, white);
+  font: var(--mat-sys-body-medium);
+}
+
+.fn-tip mat-icon {
+  color: #c9956c;
+}
+
+/* Payments */
+.fn-payments {
+  display: grid;
+  gap: 10px;
+}
+
+.fn-payment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 18%, transparent);
+}
+
+.fn-payment.paid {
+  background: color-mix(in srgb, var(--mat-sys-secondary-container) 30%, white);
+}
+
+.fn-payment-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fn-payment-title strong {
+  font: var(--mat-sys-title-small);
+}
+
+.fn-payment-main small {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.fn-tag-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mat-sys-tertiary-container) 70%, white);
+  color: var(--mat-sys-on-tertiary-container);
+  font: var(--mat-sys-label-small);
+}
+
+.fn-tag-custom mat-icon {
+  font-size: 13px;
+  width: 13px;
+  height: 13px;
+}
+
+.fn-payment-side {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fn-payment-amount {
+  font: var(--mat-sys-title-medium);
+}
+
+.fn-payment-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fn-status-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 24%, transparent);
+  background: transparent;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-medium);
+}
+
+.fn-status-btn mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.fn-status-btn.on {
+  background: color-mix(in srgb, #4caf6d 18%, white);
+  border-color: transparent;
+  color: #3f915f;
+}
+
+/* Empty */
+.fn-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.fn-empty mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  opacity: 0.5;
+}
+
+/* Modal */
+.fn-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.fn-modal {
+  width: 100%;
+  max-width: 520px;
+  padding: 24px;
+  border-radius: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.fn-modal h2 {
+  margin: 0;
+  font-family: var(--mqc-font-display);
+}
+
+.fn-modal-sub {
+  margin: -6px 0 4px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.fn-full {
+  width: 100%;
+}
+
+.fn-modal-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.fn-modal-row mat-form-field {
+  flex: 1;
+}
+
+.fn-paid-toggle {
+  white-space: nowrap;
+}
+
+.fn-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+@media (max-width: 780px) {
+  .fn-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .fn-modal-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fn-payment {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

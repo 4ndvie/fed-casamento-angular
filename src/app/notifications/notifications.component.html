@@ -1,0 +1,69 @@
+<header class="nt-head">
+  <div>
+    <p class="nt-sub">{{ unread() }} não lida(s)</p>
+  </div>
+  <button mat-stroked-button (click)="markAll()" [disabled]="unread() === 0">
+    <mat-icon>done_all</mat-icon> Marcar todas como lidas
+  </button>
+</header>
+
+<article class="nt-google-box">
+  <div class="nt-google-head">
+    <h3>Google Calendar API</h3>
+    <small>Opcional: use um token OAuth para criar eventos direto na agenda.</small>
+  </div>
+
+  <mat-form-field appearance="outline" class="nt-google-input">
+    <mat-label>Access token OAuth (scope calendar.events)</mat-label>
+    <input matInput type="password" [(ngModel)]="googleToken" />
+  </mat-form-field>
+
+  <div class="nt-google-actions">
+    <button mat-stroked-button (click)="clearGoogleToken()">Limpar token</button>
+    <button mat-flat-button class="nt-google-save" (click)="saveGoogleToken()">Salvar token</button>
+  </div>
+</article>
+
+@if (notifications().length) {
+  <section class="nt-list">
+    @for (n of notifications(); track n.id) {
+      <article class="nt-item" [class.unread]="!n.read" [attr.data-type]="n.type">
+        <span class="nt-icon"><mat-icon>{{ icon(n.type) }}</mat-icon></span>
+        <div class="nt-body">
+          <div class="nt-title-row">
+            <strong>{{ n.title }}</strong>
+            <span class="nt-type">{{ label(n.type) }}</span>
+          </div>
+          <p>{{ n.description }}</p>
+          <div class="nt-meta">
+            <span><mat-icon>schedule</mat-icon> {{ formatDate(n.date) }}</span>
+            @if (n.addToCalendar) {
+              <span class="nt-synced"><mat-icon>event_available</mat-icon> No calendário</span>
+            }
+          </div>
+        </div>
+        <div class="nt-actions">
+          <button mat-icon-button (click)="addToGoogleCalendar(n)" aria-label="Enviar para Google Calendar"
+                  [disabled]="isGoogleSyncLoading"
+                  matTooltip="Google Calendar API (com token) ou URL de template">
+            <mat-icon>event</mat-icon>
+          </button>
+          <button mat-icon-button (click)="addToCalendar(n)" aria-label="Adicionar ao calendário (.ics)"
+                  matTooltip="Baixar .ics para qualquer calendário">
+            <mat-icon>calendar_add_on</mat-icon>
+          </button>
+          @if (!n.read) {
+            <button mat-icon-button (click)="markRead(n.id)" aria-label="Marcar como lida">
+              <mat-icon>mark_email_read</mat-icon>
+            </button>
+          }
+        </div>
+      </article>
+    }
+  </section>
+} @else {
+  <div class="nt-empty">
+    <mat-icon>notifications_none</mat-icon>
+    <p>Sem notificações no momento.</p>
+  </div>
+}

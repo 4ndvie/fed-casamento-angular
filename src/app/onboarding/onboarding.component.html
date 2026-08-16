@@ -1,0 +1,191 @@
+<div class="ob-backdrop">
+  <div class="ob-shell">
+    <!-- Progress rail -->
+    <div class="ob-steps" aria-hidden="true">
+      <span class="ob-step-dot" [class.active]="step() === 'welcome'" [class.done]="step() !== 'welcome'"></span>
+      <span class="ob-step-line"></span>
+      <span class="ob-step-dot" [class.active]="step() === 'questions'" [class.done]="step() === 'summary'"></span>
+      <span class="ob-step-line"></span>
+      <span class="ob-step-dot" [class.active]="step() === 'summary'"></span>
+    </div>
+
+    <!-- STEP 1: Welcome -->
+    @if (step() === 'welcome') {
+      <section class="ob-welcome">
+        <img class="ob-logo" src="brand/logo-rose.png" alt="Miséri e Quero Casar" />
+        <h1>Bem-vindos ao seu planejamento</h1>
+        <p class="ob-lead">
+          Organize cada detalhe do grande dia em um só lugar. Vamos personalizar sua
+          experiência com algumas perguntas rápidas.
+        </p>
+
+        <div class="ob-features">
+          @for (f of features; track f.title) {
+            <div class="ob-feature">
+              <mat-icon>{{ f.icon }}</mat-icon>
+              <div>
+                <strong>{{ f.title }}</strong>
+                <small>{{ f.text }}</small>
+              </div>
+            </div>
+          }
+        </div>
+
+        <button mat-flat-button class="ob-primary" (click)="goToQuestions()">
+          <span>Começar configuração</span>
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </section>
+    }
+
+    <!-- STEP 2: Questions -->
+    @if (step() === 'questions') {
+      <section class="ob-questions">
+        <header class="ob-head">
+          <h2>Conte-nos sobre o seu casamento</h2>
+          <p>Essas informações ajudam a personalizar sugestões e o orçamento.</p>
+        </header>
+
+        <div class="ob-field">
+          <label>Nome do casal</label>
+          <mat-form-field appearance="outline">
+            <input matInput placeholder="Ex.: Ana &amp; Bruno"
+                   [ngModel]="form().coupleNames"
+                   (ngModelChange)="patch('coupleNames', $event)" />
+          </mat-form-field>
+        </div>
+
+        <div class="ob-field">
+          <label>Qual o estilo do casamento?</label>
+          <div class="ob-chip-grid">
+            @for (s of styles; track s.value) {
+              <button type="button" class="ob-chip"
+                      [class.selected]="form().style === s.value"
+                      (click)="selectStyle(s.value)">
+                <mat-icon>{{ s.icon }}</mat-icon>
+                <span>{{ s.label }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="ob-row">
+          <div class="ob-field">
+            <label>Número de convidados</label>
+            <mat-form-field appearance="outline">
+              <input matInput type="number" min="1"
+                     [ngModel]="form().guestCount"
+                     (ngModelChange)="patch('guestCount', +$event)" />
+            </mat-form-field>
+          </div>
+          <div class="ob-field">
+            <label>Data prevista</label>
+            <mat-form-field appearance="outline">
+              <input matInput type="date"
+                     [ngModel]="form().eventDate"
+                     (ngModelChange)="patch('eventDate', $event)" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="ob-row">
+          <div class="ob-field">
+            <label>Cidade do evento</label>
+            <mat-form-field appearance="outline">
+              <input matInput placeholder="Ex.: São Paulo"
+                     [ngModel]="form().city"
+                     (ngModelChange)="patch('city', $event)" />
+            </mat-form-field>
+          </div>
+          <div class="ob-field">
+            <label>Orçamento disponível</label>
+            <mat-form-field appearance="outline">
+              <span matTextPrefix>R$&nbsp;</span>
+              <input matInput type="number" min="0" step="1000"
+                     [ngModel]="form().budget"
+                     (ngModelChange)="patch('budget', +$event)" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="ob-field">
+          <label>Prioridades (o que é mais importante para vocês?)</label>
+          <div class="ob-chip-grid ob-chip-grid-sm">
+            @for (p of priorityOptions; track p) {
+              <button type="button" class="ob-chip"
+                      [class.selected]="form().priorities.includes(p)"
+                      (click)="togglePriority(p)">
+                <span>{{ p }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <footer class="ob-actions">
+          <button mat-stroked-button (click)="step.set('welcome')">Voltar</button>
+          <button mat-flat-button class="ob-primary" [disabled]="!canContinue" (click)="goToSummary()">
+            <span>Revisar</span>
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </footer>
+      </section>
+    }
+
+    <!-- STEP 3: Summary -->
+    @if (step() === 'summary') {
+      <section class="ob-summary">
+        <header class="ob-head">
+          <h2>Revise sua configuração</h2>
+          <p>Confira as informações antes de finalizar. Você poderá editar depois.</p>
+        </header>
+
+        <div class="ob-summary-grid">
+          <div class="ob-summary-item">
+            <mat-icon>favorite</mat-icon>
+            <div><small>Casal</small><strong>{{ form().coupleNames || '—' }}</strong></div>
+          </div>
+          <div class="ob-summary-item">
+            <mat-icon>auto_awesome</mat-icon>
+            <div><small>Estilo</small><strong>{{ styleLabel() }}</strong></div>
+          </div>
+          <div class="ob-summary-item">
+            <mat-icon>groups</mat-icon>
+            <div><small>Convidados</small><strong>{{ form().guestCount }}</strong></div>
+          </div>
+          <div class="ob-summary-item">
+            <mat-icon>event</mat-icon>
+            <div><small>Data</small><strong>{{ formatDate(form().eventDate) }}</strong></div>
+          </div>
+          <div class="ob-summary-item">
+            <mat-icon>place</mat-icon>
+            <div><small>Cidade</small><strong>{{ form().city || '—' }}</strong></div>
+          </div>
+          <div class="ob-summary-item">
+            <mat-icon>account_balance_wallet</mat-icon>
+            <div><small>Orçamento</small><strong>{{ formatCurrency(form().budget) }}</strong></div>
+          </div>
+        </div>
+
+        @if (form().priorities.length) {
+          <div class="ob-summary-priorities">
+            <small>Prioridades</small>
+            <div class="ob-tags">
+              @for (p of form().priorities; track p) {
+                <span class="ob-tag">{{ p }}</span>
+              }
+            </div>
+          </div>
+        }
+
+        <footer class="ob-actions">
+          <button mat-stroked-button (click)="backToQuestions()">Editar</button>
+          <button mat-flat-button class="ob-primary" (click)="confirm()">
+            <mat-icon>check</mat-icon>
+            <span>Finalizar configuração</span>
+          </button>
+        </footer>
+      </section>
+    }
+  </div>
+</div>
+

@@ -1,0 +1,146 @@
+:host {
+  display: block;
+}
+
+.ps-head h2 {
+  margin: 0;
+  font-family: var(--mqc-font-display);
+  font-size: 1.8rem;
+}
+
+.ps-head p {
+  margin: 6px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.ps-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.ps-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--mat-sys-surface) 92%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 22%, transparent);
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-large);
+}
+
+.ps-tab.active {
+  background: #8a4f7d;
+  color: #fff;
+  border-color: transparent;
+}
+
+.ps-upload-row {
+  margin-bottom: 12px;
+}
+
+.ps-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: color-mix(in srgb, var(--mat-sys-primary-container) 65%, white);
+  color: var(--mat-sys-on-primary-container);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-primary) 25%, transparent);
+  font: var(--mat-sys-label-large);
+}
+
+.ps-upload-btn input {
+  display: none;
+}
+
+.ps-grid,
+.ps-collages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.ps-media-card,
+.ps-collage-card {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 18%, transparent);
+}
+
+.ps-media-card img,
+.ps-collage-card img,
+.ps-media-card video {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.ps-collage-body {
+  padding: 12px;
+}
+
+.ps-collage-body h4 {
+  margin: 0 0 4px;
+  font: var(--mat-sys-title-small);
+}
+
+.ps-collage-body p {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.ps-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+}
+
+.ps-collage-form {
+  margin-bottom: 14px;
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.ps-collage-form h3 {
+  margin: 0 0 10px;
+  font: var(--mat-sys-title-medium);
+}
+
+.ps-full {
+  width: 100%;
+}
+
+.ps-primary {
+  border-radius: 999px;
+  background: #8a4f7d;
+  color: #fff;
+}
+
+.ps-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 42px 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.ps-empty mat-icon {
+  width: 42px;
+  height: 42px;
+  font-size: 42px;
+  opacity: 0.55;
+}
+

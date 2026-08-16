@@ -1,0 +1,42 @@
+<mat-card class="gd-hero">
+  <div class="gd-hero-text">
+    <h2>Seu guia de planejamento</h2>
+    <p>Acompanhe o passo a passo e não esqueça nenhum detalhe importante.</p>
+    @if (daysToEvent() !== null) {
+      <span class="gd-countdown"><mat-icon>event</mat-icon> Faltam {{ daysToEvent() }} dias para o grande dia</span>
+    }
+  </div>
+  <div class="gd-ring" [style.--p]="progress()">
+    <span>{{ progress() }}%</span>
+  </div>
+</mat-card>
+
+@if (nextStep(); as next) {
+  <mat-card class="gd-next">
+    <mat-icon>tips_and_updates</mat-icon>
+    <div>
+      <small>Próximo passo sugerido</small>
+      <strong>{{ next.title }}</strong>
+      <p>{{ next.description }}</p>
+    </div>
+    <button mat-flat-button class="gd-next-btn" (click)="toggle(next.id)">Concluir</button>
+  </mat-card>
+}
+
+@for (phase of stepsByPhase(); track phase.key) {
+  <section class="gd-phase">
+    <h3 class="gd-phase-title">{{ phase.label }}</h3>
+    <div class="gd-steps">
+      @for (step of phase.steps; track step.id) {
+        <button type="button" class="gd-step" [class.done]="step.done" (click)="toggle(step.id)">
+          <span class="gd-step-icon"><mat-icon>{{ step.done ? 'check_circle' : step.icon }}</mat-icon></span>
+          <span class="gd-step-body">
+            <strong>{{ step.title }}</strong>
+            <small>{{ step.description }}</small>
+          </span>
+        </button>
+      }
+    </div>
+  </section>
+}
+

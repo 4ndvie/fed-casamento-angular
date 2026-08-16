@@ -1,0 +1,52 @@
+<section class="q-tabs">
+  @for (tab of tabs; track tab.value) {
+    <button type="button" class="q-tab" [class.active]="active() === tab.value" (click)="active.set(tab.value)">
+      <mat-icon>{{ tab.icon }}</mat-icon>
+      <span>{{ tab.label }}</span>
+      <span class="q-tab-count">{{ countOf(tab.value) }}</span>
+    </button>
+  }
+</section>
+
+@if (current().length) {
+  <section class="q-list">
+    @for (quote of current(); track quote.id) {
+      <mat-card class="q-card" [attr.data-status]="quote.status">
+        <div class="q-card-main">
+          <div class="q-card-head">
+            <h3>{{ quote.vendorName }}</h3>
+            <span class="q-badge">{{ quote.category }}</span>
+          </div>
+          <p class="q-msg">{{ quote.message }}</p>
+          <div class="q-meta">
+            <span><mat-icon>event</mat-icon> Solicitado em {{ formatDate(quote.requestedAt) }}</span>
+            @if (quote.status === 'expiring') {
+              <span class="q-warn"><mat-icon>schedule</mat-icon> Vence em {{ daysLeft(quote.dueDate) }} dia(s)</span>
+            } @else if (quote.status === 'pending') {
+              <span><mat-icon>hourglass_empty</mat-icon> Retorno até {{ formatDate(quote.dueDate) }}</span>
+            } @else if (quote.status === 'approved') {
+              <span class="q-ok"><mat-icon>check_circle</mat-icon> Fornecedor confirmado</span>
+            }
+          </div>
+        </div>
+        <div class="q-card-side">
+          <span class="q-amount-label">Valor</span>
+          <strong class="q-amount">{{ formatCurrency(quote.amount) }}</strong>
+          @if (quote.status === 'answered') {
+            <button mat-flat-button class="q-approve">Aprovar</button>
+          } @else if (quote.status === 'pending') {
+            <button mat-stroked-button>Reenviar</button>
+          } @else if (quote.status === 'expiring') {
+            <button mat-flat-button class="q-approve">Responder</button>
+          }
+        </div>
+      </mat-card>
+    }
+  </section>
+} @else {
+  <div class="q-empty">
+    <mat-icon>inbox</mat-icon>
+    <p>Nenhum orçamento nesta categoria.</p>
+  </div>
+}
+
