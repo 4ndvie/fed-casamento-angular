@@ -87,6 +87,24 @@ app-root .menu-shell {
   transition: grid-template-columns 260ms ease;
 }
 
+app-root .menu-shell,
+app-root .menu-sidebar,
+app-root .menu-content,
+app-root .menu-rail,
+app-root .menu-nav-item,
+app-root .menu-submenu-item,
+app-root .mega-menu-action,
+app-root .menu-user-footer,
+app-root .metric-card {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    opacity 180ms ease;
+}
+
 app-root .menu-shell.sidebar-collapsed {
   grid-template-columns: 72px 0 1fr;
   gap: 10px;
@@ -152,9 +170,28 @@ app-root .menu-rail-item {
   color: var(--mat-sys-on-surface-variant);
 }
 
+app-root .menu-rail-item:hover,
+app-root .menu-rail-item:focus-visible,
+app-root .menu-nav-item:hover,
+app-root .menu-nav-item:focus-visible,
+app-root .menu-submenu-item:hover,
+app-root .menu-submenu-item:focus-visible,
+app-root .mega-menu-action:hover,
+app-root .mega-menu-action:focus-visible,
+app-root .menu-user-footer:hover,
+app-root .menu-user-footer:focus-visible {
+  transform: translateY(-1px);
+}
+
 app-root .menu-rail-item.active {
   background: #8a4f7d;
   color: #ffffff;
+}
+
+app-root .menu-rail-item:hover:not(.active),
+app-root .menu-rail-item:focus-visible:not(.active) {
+  background: color-mix(in srgb, var(--mat-sys-primary-container) 78%, white);
+  color: var(--mat-sys-primary);
 }
 
 app-root .menu-sidebar {
@@ -169,6 +206,12 @@ app-root .menu-sidebar {
   min-width: 0;
   transition: opacity 220ms ease, transform 220ms ease, padding 220ms ease;
   overflow: hidden;
+}
+
+app-root .menu-sidebar:hover,
+app-root .menu-content:hover,
+app-root .menu-rail:hover {
+  box-shadow: 0 18px 40px color-mix(in srgb, var(--mat-sys-shadow) 10%, transparent);
 }
 
 app-root .menu-sidebar.collapsed {
@@ -228,6 +271,12 @@ app-root .menu-nav-item {
   border-radius: 12px;
 }
 
+app-root .menu-nav-item:hover:not(.active),
+app-root .menu-nav-item:focus-visible:not(.active) {
+  background: color-mix(in srgb, var(--mat-sys-primary-container) 48%, white);
+  border-color: color-mix(in srgb, var(--mat-sys-primary) 24%, transparent);
+}
+
 app-root .menu-nav-item mat-icon,
 app-root .menu-user-footer mat-icon {
   margin-right: 8px;
@@ -258,6 +307,12 @@ app-root .menu-submenu-item {
   font: var(--mat-sys-body-small);
   cursor: pointer;
   text-align: left;
+}
+
+app-root .menu-submenu-item:hover,
+app-root .menu-submenu-item:focus-visible {
+  color: var(--mat-sys-primary);
+  transform: translateX(2px);
 }
 
 app-root .menu-submenu-item mat-icon {
@@ -291,6 +346,11 @@ app-root .menu-user-footer {
   border-radius: 14px;
   min-height: 56px;
   padding: 8px 12px;
+}
+
+app-root .menu-user-footer:hover,
+app-root .menu-user-footer:focus-visible {
+  background: color-mix(in srgb, var(--mat-sys-primary-container) 60%, white);
 }
 
 app-root .menu-user-footer .mdc-button__label {
@@ -347,6 +407,18 @@ app-root .menu-content {
   padding: 20px;
   background: color-mix(in srgb, var(--mat-sys-surface) 90%, transparent);
   border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 25%, transparent);
+}
+
+app-root .page-header {
+  position: sticky;
+  top: 12px;
+  z-index: 2;
+  padding: 14px 16px;
+  margin: -4px -4px 16px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--mat-sys-surface) 78%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 16%, transparent);
 }
 
 app-root .menu-sidebar.collapsed .menu-brand-text,
@@ -416,6 +488,13 @@ app-root .mega-menu-action {
   background: color-mix(in srgb, var(--mat-sys-surface) 92%, transparent);
 }
 
+app-root .mega-menu-action:hover,
+app-root .mega-menu-action:focus-visible {
+  background: color-mix(in srgb, var(--mat-sys-primary-container) 36%, white);
+  border-color: color-mix(in srgb, var(--mat-sys-primary) 22%, transparent);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+}
+
 app-root .mega-menu-action span {
   display: flex;
   flex-direction: column;
@@ -453,6 +532,39 @@ app-root .metric-card {
   border-radius: 16px;
   background: color-mix(in srgb, var(--mat-sys-surface-container-low) 85%, white);
   border: 1px solid color-mix(in srgb, var(--mat-sys-outline) 20%, transparent);
+}
+
+app-root .metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--mat-sys-shadow) 10%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  app-root .menu-shell,
+  app-root .menu-sidebar,
+  app-root .menu-content,
+  app-root .menu-rail,
+  app-root .menu-nav-item,
+  app-root .menu-submenu-item,
+  app-root .mega-menu-action,
+  app-root .menu-user-footer,
+  app-root .metric-card {
+    transition: none;
+  }
+
+  app-root .menu-rail-item:hover,
+  app-root .menu-rail-item:focus-visible,
+  app-root .menu-nav-item:hover,
+  app-root .menu-nav-item:focus-visible,
+  app-root .menu-submenu-item:hover,
+  app-root .menu-submenu-item:focus-visible,
+  app-root .mega-menu-action:hover,
+  app-root .mega-menu-action:focus-visible,
+  app-root .menu-user-footer:hover,
+  app-root .menu-user-footer:focus-visible,
+  app-root .metric-card:hover {
+    transform: none;
+  }
 }
 
 app-root .metric-label {
