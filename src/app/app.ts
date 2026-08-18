@@ -12,10 +12,11 @@ import { filter } from 'rxjs';
 import {
   AuthUser,
   MarketplaceApiService,
+  OnboardingResponse,
   Vendor,
   VendorFilters,
 } from './services/marketplace-api.service';
-import { WeddingPlannerService } from './services/wedding-planner.service';
+import { WeddingPlannerService, WeddingStyle } from './services/wedding-planner.service';
 import { VendorSearchComponent, VendorSearchFilters } from './vendor-search/vendor-search.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
 import { QuotesComponent } from './quotes/quotes.component';
@@ -273,6 +274,8 @@ export class App implements OnInit {
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe(() => this.syncMenuFromUrl());
 
+    await this.syncOnboardingFromBackend();
+
     await this.loadVendors({});
   }
 
@@ -373,6 +376,7 @@ export class App implements OnInit {
             });
 
       this.saveSession(authResponse.token, authResponse.user);
+      await this.syncOnboardingFromBackend();
       this.notify(
         this.authMode === 'register'
           ? 'Cadastro realizado com sucesso!'
@@ -485,5 +489,36 @@ export class App implements OnInit {
   private syncMenuFromUrl(): void {
     const segment = this.router.url.split('?')[0].split('#')[0].split('/').filter(Boolean)[0];
     this.activeMenu = this.pathMenuMap[segment ?? 'fornecedores'] ?? 'vendors';
+  }
+
+  private async syncOnboardingFromBackend(): Promise<void> {
+    if (!this.token) {
+      return;
+    }
+
+    try {
+      const onboarding = await this.api.getOnboarding(this.token);
+      this.planner.saveOnboarding(
+        {
+          coupleNames: onboarding.coupleNames ?? '',
+          style: this.normalizeStyle(onboarding.style),
+          guestCount: onboarding.guestCount ?? 100,
+          budget: onboarding.budget ?? 50000,
+          eventDate: onboarding.eventDate ?? '',
+          city: onboarding.city ?? '',
+          priorities: onboarding.priorities ?? [],
+        },
+        onboarding.completed,
+      );
+    } catch (error) {
+      // Keep a safe local default so first-time users still see onboarding if sync fails.
+      this.planner.resetOnboarding();
+      this.notify(this.getErrorMessage(error), 'error');
+    }
+  }
+
+  private normalizeStyle(style: OnboardingResponse['style']): WeddingStyle | '' {
+    const validStyles: WeddingStyle[] = ['classico', 'rustico', 'praia', 'moderno', 'intimista', 'religioso'];
+    return validStyles.includes(style as WeddingStyle) ? (style as WeddingStyle) : '';
   }
 }

@@ -43,6 +43,17 @@ export interface AuthResponse {
   user: AuthUser;
 }
 
+export interface OnboardingResponse {
+  coupleNames: string | null;
+  style: string | null;
+  guestCount: number | null;
+  budget: number | null;
+  eventDate: string | null;
+  city: string | null;
+  priorities: string[] | null;
+  completed: boolean;
+}
+
 export interface CreateQuotePayload {
   vendorId: string;
   eventDate: string;
@@ -102,6 +113,20 @@ export class MarketplaceApiService {
       );
     } catch (error) {
       throw new Error(this.getErrorMessage(error, 'Erro ao enviar orçamento'));
+    }
+  }
+
+  async getOnboarding(token: string): Promise<OnboardingResponse> {
+    try {
+      return await firstValueFrom(
+        this.http.get<OnboardingResponse>(`${this.baseUrl}/onboarding`, {
+          headers: new HttpHeaders({
+            Authorization: `Bearer ${token}`,
+          }),
+        }),
+      );
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Erro ao carregar onboarding'));
     }
   }
 
